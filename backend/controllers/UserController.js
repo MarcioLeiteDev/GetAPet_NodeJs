@@ -181,6 +181,11 @@ module.exports = class UserController {
         const token = getToken(req)
         const user = await getUserByToken(token)
 
+
+        if (req.file) {
+          user.image = req.file.filename
+        }
+
         if(!name){
             return res.status(422).json({ message: 'O nome é obrigatorio'})
         }
