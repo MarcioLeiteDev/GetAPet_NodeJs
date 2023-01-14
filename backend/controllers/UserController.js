@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const getToken = require('../helpers/get-token')
 const createUsertoken = require('../helpers/create-user-token')
 const getUserByToken = require('../helpers/get-user-by-token')
+const Pet = require('../models/Pet')
 
 module.exports = class UserController {
 
@@ -270,6 +271,18 @@ module.exports = class UserController {
   
 
 
+    }
+
+    static async getAllUserAdoptions(req,res){
+        
+        const token = getToken(req)
+        const user = await getUserByToken(token)
+
+        const pets = await Pet.find( { 'adopter._id' : user._id}).sort('-createdAt')
+
+        res.status(200).josn({
+            pets,
+        })
     }
 
 }
